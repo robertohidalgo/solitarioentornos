@@ -57,7 +57,7 @@ public class Carta {
     }
 
     public boolean distintoColor(Carta carta) {
-        return this.rojo() && carta.rojo() 
+        return this.rojo() && !carta.rojo() 
                 || !this.rojo() && carta.rojo();
     }
     
