@@ -9,8 +9,8 @@ package sinJUnit;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import solitarioconpolimorfismo.juego.Carta;
-import solitarioconpolimorfismo.juego.PaloCarta;
+import main.juego.Carta;
+import main.juego.PaloCarta;
 
 /**
  *

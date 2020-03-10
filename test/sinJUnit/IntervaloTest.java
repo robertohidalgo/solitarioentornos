@@ -6,7 +6,7 @@ package sinJUnit;
  * and open the template in the editor.
  */
 
-import solitarioconpolimorfismo.util.Intervalo;
+import main.util.Intervalo;
 /**
  *
  * @author Rober
