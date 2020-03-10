@@ -19,7 +19,6 @@ public class Carta {
     private static final int INDICE_AS = 0;
     
     public Carta(PaloCarta palo, int numero){
-        assert new Intervalo(1, 12).incluye(numero);
         this.palo = palo;
         this.indiceNumero = numero - 1;
         this.bocaAbajo = true;

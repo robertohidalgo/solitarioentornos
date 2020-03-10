@@ -27,7 +27,6 @@ public abstract class Mazo {
     
     public void pon(Carta carta) {
         assert carta != null;
-        assert !carta.bocaArriba();
         assert !this.completa();
         cartas[ultima] = carta;
         ultima++;

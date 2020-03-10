@@ -5,36 +5,29 @@
  */
 package main.juego;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 /**
  *
  * @author Rober
  */
-public class CartaConExcepcionesTest {
+public class CartaConExpectedTest {
     private Carta cartaRoja;
     private Carta cartaNegra;
     
-    public CartaConExcepcionesTest(){
+    public CartaConExpectedTest(){
         this.cartaRoja = new Carta(PaloCarta.CORAZONES, 4);
         this.cartaNegra = new Carta(PaloCarta.PICAS, 5);
     }
     
-    @Test
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
     public void testCarta() {
-        try {
             Carta cartaRoja = new Carta(PaloCarta.CORAZONES, 100);
             cartaRoja.voltea();
             cartaRoja.toString();
-            fail();
-        }
-        catch (ArrayIndexOutOfBoundsException e) {
-            
-        }
-        catch (Exception e) {
-            fail();
-        }
     }
     
     @Test
