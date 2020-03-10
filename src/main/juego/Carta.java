@@ -49,6 +49,7 @@ public class Carta {
     }
 
     public boolean igualPalo(Carta carta) {
+        assert carta!= null;
         return palo == carta.palo;
     }
     
@@ -57,6 +58,7 @@ public class Carta {
     }
 
     public boolean distintoColor(Carta carta) {
+        assert carta!=null;
         return this.rojo() && !carta.rojo() 
                 || !this.rojo() && carta.rojo();
     }
@@ -66,6 +68,7 @@ public class Carta {
     }
     
     public boolean esUnNumeroMenor(Carta carta) {
+        assert carta != null;
         return indiceNumero == carta.indiceNumero-1;
     }
 
