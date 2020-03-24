@@ -3,48 +3,63 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.juego;
-
+package main.juego.carta;
 
 import main.juego.Carta;
 import main.juego.PaloCarta;
-import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 /**
  *
  * @author Rober
  */
-public class CartaCompactTest {
+public class CartaConExcepcionesTest {
+    private Carta cartaRoja;
+    private Carta cartaNegra;
+    
+    public CartaConExcepcionesTest(){
+        this.cartaRoja = new Carta(PaloCarta.CORAZONES, 4);
+        this.cartaNegra = new Carta(PaloCarta.PICAS, 5);
+    }
+    
+    @Test
+    public void testCarta() {
+        try {
+            Carta cartaRoja = new Carta(PaloCarta.CORAZONES, 100);
+            cartaRoja.voltea();
+            cartaRoja.toString();
+            fail();
+        }
+        catch (ArrayIndexOutOfBoundsException e) {
+            
+        }
+        catch (Exception e) {
+            fail();
+        }
+    }
     
     @Test
     public void testDistintoColor() {
-            Carta cartaRoja = new Carta(PaloCarta.CORAZONES, 4);
             cartaRoja.voltea();
-            Carta cartaNegra = new Carta(PaloCarta.PICAS, 5);
             cartaNegra.voltea();
-            
             assertTrue(cartaRoja.distintoColor(cartaNegra));
     }
     
     @Test
     public void testVoltea() {
-            Carta cartaRoja = new Carta(PaloCarta.CORAZONES, 4);
             cartaRoja.voltea();
+            assertTrue(cartaRoja.bocaArriba());
+            cartaNegra.voltea();
             assertTrue(cartaRoja.bocaArriba());
             cartaRoja.voltea();
             assertFalse(cartaRoja.bocaArriba());
-            cartaRoja.voltea();
-            assertTrue(cartaRoja.bocaArriba());
     }   
     
     @Test
     public void testEsUnNumeroMenor() {
-            Carta cartaRoja = new Carta(PaloCarta.CORAZONES, 4);
             cartaRoja.voltea();
-            Carta cartaNegra = new Carta(PaloCarta.PICAS, 5);
             cartaNegra.voltea();
-            
             assertTrue(cartaRoja.esUnNumeroMenor(cartaNegra));
             assertFalse(cartaNegra.esUnNumeroMenor(cartaRoja));
     }

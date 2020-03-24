@@ -3,26 +3,33 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package main.juego;
-
+package main.juego.carta;
 
 import main.juego.Carta;
 import main.juego.PaloCarta;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *
  * @author Rober
  */
-public class CartaConConstructorTest {
-    
+public class CartaConExpectedTest {
     private Carta cartaRoja;
     private Carta cartaNegra;
     
-    public CartaConConstructorTest(){
+    public CartaConExpectedTest(){
         this.cartaRoja = new Carta(PaloCarta.CORAZONES, 4);
         this.cartaNegra = new Carta(PaloCarta.PICAS, 5);
+    }
+    
+    @Test(expected = ArrayIndexOutOfBoundsException.class)
+    public void testCarta() {
+            Carta cartaRoja = new Carta(PaloCarta.CORAZONES, 100);
+            cartaRoja.voltea();
+            cartaRoja.toString();
     }
     
     @Test
