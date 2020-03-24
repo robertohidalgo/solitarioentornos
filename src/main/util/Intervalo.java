@@ -118,6 +118,13 @@ public class Intervalo {
                 && superior == intervalo.superior;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        return this.equals((Intervalo)obj); 
+    }
+    
+    
+
     /**
      * Obtiene el Intervalo que intersecta entre el Intervalo que se recibe y
      * uno mismo
