@@ -1,5 +1,6 @@
 package main.juego.util;
 
+import main.exceptions.IntervaloException;
 import static org.junit.Assert.*;
 import main.util.Intervalo;
 
@@ -12,6 +13,8 @@ public class IntervaloObjectTest {
         //Valores adicionales para ejercitar el SUT
 	private int desplazamiento;
 	private Intervalo intervaloAuxiliar;
+        private Intervalo intervaloAuxiliarExcepcion;
+        
 
         // Valores obtenidos en la ejercitación de cada método del SUT
 	private int longitudEsperada;
@@ -25,7 +28,7 @@ public class IntervaloObjectTest {
 
 	public IntervaloObjectTest(
 			int inferior, int superior, // OUT
-			int desplazamiento, Intervalo intervalo, // arguments
+			int desplazamiento, Intervalo intervaloAuxiliar, Intervalo intervaloAuxiliarExcepcion, // arguments
 			int longitudEsperada, 
 			Intervalo intervaloDesplazadoEsperado,
 			boolean incluyeValorEsperado,
@@ -37,7 +40,8 @@ public class IntervaloObjectTest {
 		this.superiorSUT = superior;
 
 		this.desplazamiento = desplazamiento;
-		this.intervaloAuxiliar = intervalo;
+		this.intervaloAuxiliar = intervaloAuxiliar;
+                this.intervaloAuxiliarExcepcion = intervaloAuxiliarExcepcion;
 
 		this.longitudEsperada = longitudEsperada;
 		this.intervaloDesplazadoEsperado = intervaloDesplazadoEsperado;
@@ -85,10 +89,25 @@ public class IntervaloObjectTest {
 				intersectaEsperado, intersectaObtenido);
 	}
 
-	public void testInterseccion() {
+	public void testInterseccionNoExcepcion() {
 		this.before();
-		Intervalo intervaloInterseccionObtenido = intervaloSUT.interseccion(intervaloAuxiliar);
-		assertEquals("Para el intervalo " + intervaloSUT + " y intervalo " + intervaloAuxiliar,
-				intervaloInterseccionEsperado, intervaloInterseccionObtenido);
+                try {
+                    Intervalo intervaloInterseccionObtenido = intervaloSUT.interseccion(intervaloAuxiliar);
+                    assertEquals("Para el intervalo " + intervaloSUT + " y intervalo " + intervaloAuxiliar,
+                                    intervaloInterseccionEsperado, intervaloInterseccionObtenido);
+                }catch(IntervaloException ex) {
+                    fail();
+                }
+	}
+        
+        public void testInterseccionExcepcion() {
+		this.before();
+                try {
+                    Intervalo intervaloInterseccionObtenido = intervaloSUT.interseccion(intervaloAuxiliar);
+                    assertEquals("Para el intervalo " + intervaloSUT + " y intervalo " + intervaloAuxiliar,
+                                    intervaloInterseccionEsperado, intervaloInterseccionObtenido);
+                }catch(IntervaloException ex) {
+                    fail();
+                }
 	}
 }

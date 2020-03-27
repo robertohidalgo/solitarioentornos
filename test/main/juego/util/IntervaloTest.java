@@ -1,5 +1,6 @@
 package main.juego.util;
 
+import main.exceptions.IntervaloException;
 import static org.junit.Assert.*;
 import org.junit.Test;
 import main.util.Intervalo;
@@ -50,7 +51,18 @@ public class IntervaloTest {
 
     @Test
     public void testInterseccion() {
-        assertEquals(new Intervalo(16, 30), intervalo12_34.interseccion(new Intervalo(16, 30)));
-        assertEquals(new Intervalo(-7, -5), intervalo_8_4.interseccion(new Intervalo(-7, -5)));
+        try {
+            assertEquals(new Intervalo(16, 30), intervalo12_34.interseccion(new Intervalo(16, 30)));
+        }catch(IntervaloException ex) {
+            fail();
+        }
+        
+        try {
+            assertEquals(new Intervalo(-7, -5), intervalo_8_4.interseccion(new Intervalo(5, 7)));
+            fail();
+        }catch(IntervaloException ex) {
+        }catch(Exception ex) {
+            fail();
+        }
     }
 }

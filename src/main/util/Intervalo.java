@@ -1,203 +1,206 @@
 package main.util;
 
+import main.exceptions.IntervaloException;
+
 public class Intervalo {
 
     private double inferior;
     private double superior;
 
     /**
-     * Proporciona un Intervalo con los límites inferior y superior dados
+     * Proporciona un intervalo con los límites inferior y superior dados
      *
      * @param inferior
      * @param superior
      */
-    public Intervalo(double inferior, double superior) {
-        assert superior >= inferior;
-        
-        this.inferior = inferior;
-        this.superior = superior;
+    public Intervalo(double inf, double sup) {
+        assert sup >= inf;
+        this.inferior = inf;
+        this.superior = sup;
     }
 
     /**
-     * Proporciona un Intervalo con límite superior dado
+     * Proporciona un intervalo con límite superior dado
      *
      * @param superior
      */
-    public Intervalo(double superior) {
-        this(0, superior);
-       
+    public Intervalo(double sup) {
+        inferior = 0;
+        assert sup >= this.inferior;
+        this.superior = sup;
     }
 
     /**
-     * Proporciona un Intervalo a partir de otro (copia)
+     * Proporciona un intervalo a partir de otro (copia)
      *
-     * @param Intervalo
+     * @param intervalo
      */
     public Intervalo(Intervalo intervalo) {
-        this(intervalo.inferior, intervalo.superior);
+        this.superior = intervalo.superior;
+        this.inferior = intervalo.inferior;
     }
 
     /**
-     * Proporciona un Intervalo con límites por defecto
+     * Proporciona un intervalo con límites por defecto
      */
     public Intervalo() {
-        this(0, 0);
+        this.superior = 10;
+        this.inferior = 0;
     }
 
     /**
-     * Clona el Intervalo
+     * Clona el intervalo
      *
      * @return
      */
     public Intervalo clone() {
-        return new Intervalo(this);
+
+        return new Intervalo(this.inferior, this.superior);
     }
 
     /**
-     * Longitud del Intervalo
+     * Longitud del intervalo
      *
      * @return
      */
     public double longitud() {
-        return superior - inferior;
+        return (superior - inferior);
     }
 
     /**
-     * Desplaza los límites del Intervalo según lo indicado
+     * Desplaza los límites del intervalo según lo indicado
      *
      * @param desplazamiento
      */
     public void desplazar(double desplazamiento) {
-        inferior += desplazamiento;
-        superior += desplazamiento;
+        this.superior += desplazamiento;
+        this.inferior += desplazamiento;
     }
 
     /**
-     * Obtiene el Intervalo desplazado según el desplazamiento proporcionado
+     * Obtiene el intervalo desplazado según el desplazamiento proporcionado
      *
      * @param desplazamiento
      * @return
      */
     public Intervalo desplazado(double desplazamiento) {
-        Intervalo Intervalo = this.clone();
-        Intervalo.desplazar(desplazamiento);
-        return Intervalo;
+
+        return new Intervalo(this.inferior + desplazamiento, this.superior + desplazamiento);
     }
 
     /**
-     * Determina el valor está dentro del Intervalo
+     * Determina el valor está dentro del intervalo
      *
      * @param valor
      * @return
      */
     public boolean incluye(double valor) {
-        return inferior <= valor && valor <= superior;
+
+        if (valor < this.inferior || valor > this.superior) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 
     /**
-     * Determina si el Intervalo proporcionado está incluido en el Intervalo
+     * Determina si el intervalo proporcionado está incluido en el intervalo
      *
-     * @param Intervalo
+     * @param intervalo
      * @return
      */
     public boolean incluye(Intervalo intervalo) {
-        assert intervalo != null;
-        return this.incluye(intervalo.inferior)
-                && this.incluye(intervalo.superior);
+
+        if (intervalo.inferior > this.inferior && intervalo.superior <= this.superior) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
      * Determina si dos intervalos son iguales
      *
-     * @param Intervalo
+     * @param intervalo
      * @return
      */
     public boolean equals(Intervalo intervalo) {
-        assert intervalo != null;
-        return inferior == intervalo.inferior
-                && superior == intervalo.superior;
+
+        if (this.inferior == intervalo.inferior && this.superior == intervalo.superior) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
     public boolean equals(Object obj) {
-        return this.equals((Intervalo)obj); 
+        return equals((Intervalo) obj );
     }
     
-    
-
     /**
-     * Obtiene el Intervalo que intersecta entre el Intervalo que se recibe y
-     * uno mismo
+     * Obtiene el intervalo que intersecta
      *
-     * @param Intervalo
+     * @param intervalo
      * @return
      */
-    public Intervalo interseccion(Intervalo intervalo) {
-        assert this.intersecta(intervalo);
-        
-        if (this.incluye(intervalo)) {
-            return intervalo.clone();
-        } else if (intervalo.incluye(this)) {
-            return this.clone();
-        } else if (this.incluye(intervalo.inferior)) {
-            return new Intervalo(intervalo.inferior, superior);
+    public Intervalo interseccion(Intervalo intervalo) throws IntervaloException{
+
+         if (this.inferior < intervalo.superior && intervalo.inferior < this.superior) {
+             double min;
+             double max;
+             if (this.inferior >= intervalo.inferior) {
+                 min = this.inferior;
+             } else {
+                 min = intervalo.inferior;
+             }
+             if (this.superior <= intervalo.superior) {
+                 max = this.superior;
+             } else {
+                 max = intervalo.superior;
+             }
+             return new Intervalo(min, max);
+             
+         } else {
+             throw new IntervaloException("Los intervalos no intersectan");
+         }
+    }
+
+    /**
+     * Deterimna si un intervalo intersecta
+     *
+     * @param intervalo
+     * @return
+     */
+    public boolean intersecta(Intervalo intervalo) {
+
+        if (this.inferior < intervalo.superior && intervalo.inferior < this.superior) {
+            return true;
         } else {
-            return new Intervalo(inferior, intervalo.superior);
+            return false;
         }
     }
 
     /**
-     * Deterimna si el Intervalo intersecta con el proporcionado
-     *
-     * @param Intervalo
-     * @return
-     */
-    public boolean intersecta(Intervalo intervalo) {
-        assert intervalo != null;
-        return this.incluye(intervalo.inferior)
-                || this.incluye(intervalo.superior)
-                || intervalo.incluye(inferior)
-                || intervalo.incluye(superior);
-    }
-
-    /**
-     * Transforma el Intervalo a su opuesto
+     * Transforma el intervalo a su opuesto
      */
     public void oponer() {
-        double inferiorInicial = inferior;
-        double superiorInicial = superior;
-        inferior = -superiorInicial;
-        superior = -inferiorInicial;
+        double infOpuesto = -inferior;
+        double supOpuesto = -superior;
+        this.inferior = supOpuesto;
+        this.superior = infOpuesto;
+        
     }
 
     /**
-     * Aumenta el tamaño del Intervalo al doble de su longitud por ambos
+     * Aumenta el tamaño del intervalo al doble de su longitud por ambos
      * extremos
      */
     public void doblar() {
-        double longitudInicial = this.longitud();
-        inferior -= longitudInicial / 2;
-        superior += longitudInicial / 2;
-    }
-
-    /**
-     * Pide al usuario que introduzca los límites del Intervalo
-     */
-    public void recoger() {
-        GestorIO gestorIO = new GestorIO();
-        gestorIO.out("Inferior?");
-        inferior = gestorIO.inDouble();
-        gestorIO.out("Superior?");
-        superior = gestorIO.inDouble();
-    }
-
-    /**
-     * Muestra el Intervalo siguiedo el formato [limiteInferior, limiteSuperior]
-     *
-     */
-    public void mostrar() {
-        GestorIO gestorIO = new GestorIO();
-        gestorIO.out("[" + inferior + "," + superior + "]");
+        double valorADoblar = (superior - inferior)/2;
+        this.inferior -= valorADoblar;
+        this.superior += valorADoblar;
     }
 
     /**
@@ -208,23 +211,24 @@ public class Intervalo {
      * @return
      */
     public Intervalo[] trocear(int trozos) {
-        assert trozos > 0;
         
-        double longitudTrozo = longitud() / trozos;
-        Intervalo[] subIntervalos = new Intervalo[trozos];
+        Intervalo[] troceado = new Intervalo[trozos];
+        double longitud = superior - inferior;
+        double longitudTrozos = longitud / trozos;
+        troceado[0].inferior = this.inferior;
+        troceado[0].superior = troceado[0].inferior + longitudTrozos;
         
-        double inferiorTrozo = this.inferior;
-        for (int i = 0; i < trozos; i++) {
-            double superiorTrozo = inferiorTrozo + longitudTrozo;
-            subIntervalos[i] = new Intervalo(inferiorTrozo, superiorTrozo);
-            inferiorTrozo += longitudTrozo;
+        for(int i = 1; i < troceado.length; i++) {
+            troceado[i].inferior = troceado[i - 1].superior;
+            troceado[i].superior = troceado[i].inferior + longitudTrozos; 
         }
         
-        return subIntervalos;
+        return troceado;
     }
     
     @Override
     public String toString() {
-        return "[" + this.inferior + "," + this.superior + "]";
+        return "["+ inferior + "," + superior+"]";
     }
+
 }

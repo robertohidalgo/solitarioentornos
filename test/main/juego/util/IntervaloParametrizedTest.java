@@ -1,5 +1,8 @@
 package main.juego.util;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import main.exceptions.IntervaloException;
 import static org.junit.Assert.*;
 
 import org.junit.Before;
@@ -18,6 +21,8 @@ public class IntervaloParametrizedTest {
 
     private int desplazamiento;
     private Intervalo intervaloAuxiliar;
+    private Intervalo intervaloAuxiliarExcepcion;
+    
 
     private int longitudEsperada;
     private Intervalo intervaloDesplazadoEsperado;
@@ -26,7 +31,7 @@ public class IntervaloParametrizedTest {
     private boolean intersectaEsperado;
     private Intervalo intervaloInterseccionEsperado;
 
-    @Parameters(name = "{index}: Para [{0}, {1}], con desplazamiento {2} y intervalo auxiliar {3}")
+    @Parameters(name = "{index}: Para [{0}, {1}], con desplazamiento {2} y intervalo auxiliar {3} y {4}")
     public static Object[][] datos() {
         return new Object[][]{
             // private int inferiorSUT;
@@ -34,6 +39,7 @@ public class IntervaloParametrizedTest {
             //
             // private int desplazamiento;
             // private Intervalo intervaloAuxiliar;
+            // private Intervalo intervaloAuxiliarExcepcion;
             //
             // private int longitudEsperada;
             // private Intervalo intervaloDesplazadoEsperado;
@@ -41,32 +47,32 @@ public class IntervaloParametrizedTest {
             // private boolean incluyeIntervaloEsperado;
             // private boolean intersectaEsperado;
             // private Intervalo intervaloInterseccionEsperado;
-            {12, 34,
-                16, new Intervalo(16, 30),
-                22, new Intervalo(28, 50), true, true, true,
-                new Intervalo(16, 30)},
-            {-8, -4,
-                6, new Intervalo(-7, -5),
-                4, new Intervalo(-2, 2), false, true, true,
-                new Intervalo(-7, -5)},
-            {-8, 4,
-                -2, new Intervalo(-7, -5),
-                12, new Intervalo(-10, 2), true, true, true,
-                new Intervalo(-7, -5)},
-            {-8, 4,
-                10, new Intervalo(-7, -5),
-                12, new Intervalo(2, 14), false, true, true,
-                new Intervalo(-7, -5)},
-            {-8, 4,
-                6, new Intervalo(2, 9),
-                12, new Intervalo(-2, 10), false, false, true,
-                new Intervalo(2, 4)}
+            { 12, 34, 
+                                  16, new Intervalo(16, 30), new Intervalo(0, 5),
+                                  22, new Intervalo(28, 50), true, true, true,
+                                        new Intervalo(16, 30)},
+				{ -8, -4, 
+                                   6, new Intervalo(-7, -5), new Intervalo(0, 5),
+                                   4, new Intervalo(-2, 2), false, true, true,
+					new Intervalo(-7, -5)},
+				{ -8, 4, 
+                                    -2, new Intervalo(-7, -5), new Intervalo(10, 15),
+                                    12,	new Intervalo(-10, 2), true, true, true,
+					new Intervalo(-7, -5)},
+				{ -8, 4, 
+                                    10, new Intervalo(-7, -5), new Intervalo(10, 15),
+                                    12, new Intervalo(2, 14), false, true, true,
+					new Intervalo(-7, -5)},
+				{ -8, 4, 
+                                    6, new Intervalo(2, 9), new Intervalo(10, 15),
+                                    12, new Intervalo(-2, 10), false, false, true,
+					new Intervalo(2, 4)}
         };
     }
 
     public IntervaloParametrizedTest(
             int inferiorSUT, int superiorSUT, // valores para creación del sut
-            int desplazamiento, Intervalo closedInterval, // valores auxiliares
+            int desplazamiento, Intervalo intervaloAuxiliar, Intervalo intervaloAuxiliarExcepcion,// valores auxiliares
             int longitudEsperada, // resultados
             Intervalo intervaloDesplazadoEsperado,
             boolean incluyeValorEsperado,
@@ -76,12 +82,14 @@ public class IntervaloParametrizedTest {
         this.inferiorSUT = inferiorSUT;
         this.superiorSUT = superiorSUT;
 
-        this.longitudEsperada = longitudEsperada;
         this.desplazamiento = desplazamiento;
+        this.intervaloAuxiliar = intervaloAuxiliar;
+        this.intervaloAuxiliarExcepcion = intervaloAuxiliarExcepcion;
 
+        this.longitudEsperada = longitudEsperada;
         this.intervaloDesplazadoEsperado = intervaloDesplazadoEsperado;
         this.incluyeValorEsperado = incluyeValorEsperado;
-        this.intervaloAuxiliar = closedInterval;
+     
         this.incluyeIntervaloEsperado = incluyeIntervaloEsperado;
         this.intersectaEsperado = intersectaEsperado;
         this.intervaloInterseccionEsperado = intervaloInterseccionEsperado;
@@ -121,7 +129,22 @@ public class IntervaloParametrizedTest {
     }
 
     @Test
-    public void testInterseccion() {
-        assertEquals(intervaloInterseccionEsperado, intervaloSUT.interseccion(intervaloAuxiliar));
+    public void testInterseccionNoExcepcion() {
+        
+        try {
+            assertEquals(intervaloInterseccionEsperado, intervaloSUT.interseccion(intervaloAuxiliar));
+        } catch (IntervaloException ex) {
+            fail();
+        }
+    }
+    
+    @Test
+    public void testInterseccionExcepcion() {
+        
+        try {
+            assertEquals(intervaloInterseccionEsperado, intervaloSUT.interseccion(intervaloAuxiliarExcepcion));
+            fail();
+        } catch (Exception ex) {
+        }
     }
 }
