@@ -16,7 +16,7 @@ public class IntervaloObjectTest {
         // Valores obtenidos en la ejercitación de cada método del SUT
 	private int longitudEsperada;
 	private Intervalo intervaloDesplazadoEsperado;
-        private boolean estaIncluidoEsperado;
+        private boolean incluyeValorEsperado;
 	private boolean incluyeIntervaloEsperado;
 	private boolean intersectaEsperado;
 	private Intervalo intervaloInterseccionEsperado;
@@ -28,7 +28,7 @@ public class IntervaloObjectTest {
 			int desplazamiento, Intervalo intervalo, // arguments
 			int longitudEsperada, 
 			Intervalo intervaloDesplazadoEsperado,
-			boolean estaIncluidoEsperado,
+			boolean incluyeValorEsperado,
 			boolean incluyeIntervaloEsperado,
 			boolean intersectaEsperado, 
 			Intervalo intervaloInterseccionEsperado) {
@@ -41,7 +41,7 @@ public class IntervaloObjectTest {
 
 		this.longitudEsperada = longitudEsperada;
 		this.intervaloDesplazadoEsperado = intervaloDesplazadoEsperado;
-		this.estaIncluidoEsperado = estaIncluidoEsperado;
+		this.incluyeValorEsperado = incluyeValorEsperado;
 		this.incluyeIntervaloEsperado = incluyeIntervaloEsperado;
 		this.intersectaEsperado = intersectaEsperado;
 		this.intervaloInterseccionEsperado = intervaloInterseccionEsperado;
@@ -66,9 +66,9 @@ public class IntervaloObjectTest {
 
 	public void testIncluyeValor() {
 		this.before();
-		boolean estaIncluidoObtenido = intervaloSUT.incluye(desplazamiento);
+		boolean incluyeValorObtenido = intervaloSUT.incluye(desplazamiento);
 		assertEquals("Para el intervalo " + intervaloSUT + " y desplazamiento " + desplazamiento, 
-				estaIncluidoEsperado, estaIncluidoObtenido);
+				incluyeValorEsperado, incluyeValorObtenido);
 	}
 
 	public void testIncluyeIntervalo() {
